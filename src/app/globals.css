@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  --meidai-blue: #003f86;
+  --meidai-blue-light: #2563a8;
+  --meidai-blue-dark: #002a5c;
+  --accent-coral: #ff6b5e;
+  --accent-yellow: #ffc83d;
+  --accent-mint: #4ecdc4;
+  --bg-cream: #fafaf7;
+}
+
+body {
+  background: var(--bg-cream);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans KR", sans-serif;
+}
