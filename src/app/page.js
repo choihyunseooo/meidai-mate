@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col">
@@ -14,12 +16,13 @@ export default function Home() {
             明大メイト
           </span>
         </div>
-        <button
+        <Link
+          href="/signup"
           className="px-5 py-2 rounded-full text-sm font-semibold text-white transition hover:opacity-90"
           style={{ backgroundColor: "var(--meidai-blue)" }}
         >
           ログイン
-        </button>
+        </Link>
       </nav>
 
       {/* 히어로 섹션 */}
@@ -53,18 +56,20 @@ export default function Home() {
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
-          <button
-            className="px-8 py-4 rounded-full text-white font-bold text-base shadow-lg transition hover:scale-105"
+          <Link
+            href="/signup"
+            className="px-8 py-4 rounded-full text-white font-bold text-base shadow-lg transition hover:scale-105 text-center"
             style={{ backgroundColor: "var(--meidai-blue)" }}
           >
             明大メールで始める
-          </button>
-          <button
-            className="px-8 py-4 rounded-full font-bold text-base border-2 transition hover:bg-gray-50"
+          </Link>
+          <Link
+            href="/signup"
+            className="px-8 py-4 rounded-full font-bold text-base border-2 transition hover:bg-gray-50 text-center"
             style={{ borderColor: "var(--meidai-blue)", color: "var(--meidai-blue)" }}
           >
             サービスについて
-          </button>
+          </Link>
         </div>
       </section>
 

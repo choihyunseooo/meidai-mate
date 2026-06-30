@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import BottomNav from "@/components/BottomNav";
 
 const RELATION_COLORS = {
   friend: "var(--accent-coral)",
@@ -35,7 +36,6 @@ export default function BrowsePage() {
       }
       setUserId(authData.user.id);
 
-      // 본인을 제외한 모든 프로필 불러오기
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -49,7 +49,6 @@ export default function BrowsePage() {
 
       setStudents(data || []);
 
-      // 본인이 이미 보낸 관심 표시 목록도 불러오기
       const { data: likesData } = await supabase
         .from("likes_sent")
         .select("to_user")
@@ -62,7 +61,7 @@ export default function BrowsePage() {
   }, [router]);
 
   const toggleLike = async (toUserId) => {
-    if (liked.includes(toUserId)) return; // 이미 보낸 경우 중복 방지
+    if (liked.includes(toUserId)) return;
 
     const { error } = await supabase.from("likes_sent").insert({
       from_user: userId,
@@ -83,7 +82,7 @@ export default function BrowsePage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10" style={{ backgroundColor: "var(--bg-cream)" }}>
+    <main className="min-h-screen px-6 py-10 pb-24" style={{ backgroundColor: "var(--bg-cream)" }}>
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-extrabold mb-1" style={{ color: "var(--meidai-blue-dark)" }}>
           見つける
@@ -172,6 +171,7 @@ export default function BrowsePage() {
           </div>
         )}
       </div>
+      <BottomNav />
     </main>
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import BottomNav from "@/components/BottomNav";
 
 const RELATION_LABELS = {
   friend: "友達",
@@ -26,7 +27,6 @@ export default function MatchesPage() {
       }
       const myId = authData.user.id;
 
-      // 1. 내가 보낸 관심 표시 목록
       const { data: sentByMe, error: err1 } = await supabase
         .from("likes_sent")
         .select("to_user")
@@ -46,7 +46,6 @@ export default function MatchesPage() {
         return;
       }
 
-      // 2. 그중에서, 나에게도 관심 표시를 보낸 사람들 (= 서로 매칭)
       const { data: mutualLikes, error: err2 } = await supabase
         .from("likes_sent")
         .select("from_user")
@@ -67,7 +66,6 @@ export default function MatchesPage() {
         return;
       }
 
-      // 3. 매칭된 사람들의 프로필 정보 가져오기
       const { data: profiles, error: err3 } = await supabase
         .from("profiles")
         .select("*")
@@ -95,7 +93,7 @@ export default function MatchesPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10" style={{ backgroundColor: "var(--bg-cream)" }}>
+    <main className="min-h-screen px-6 py-10 pb-24" style={{ backgroundColor: "var(--bg-cream)" }}>
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-extrabold mb-1" style={{ color: "var(--meidai-blue-dark)" }}>
           マッチ
@@ -159,6 +157,7 @@ export default function MatchesPage() {
           </div>
         )}
       </div>
+      <BottomNav />
     </main>
   );
 }

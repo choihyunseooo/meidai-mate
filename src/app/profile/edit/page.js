@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import BottomNav from "@/components/BottomNav";
 
 const FACULTIES = [
   "法学部", "商学部", "政治経済学部", "文学部", "理工学部",
@@ -36,7 +37,6 @@ export default function ProfileEditPage() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
 
-  // 로그인 상태 확인
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
@@ -45,6 +45,26 @@ export default function ProfileEditPage() {
         return;
       }
       setUserId(data.user.id);
+
+      // 기존 프로필이 있으면 불러와서 입력칸에 채워주기
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", data.user.id)
+        .maybeSingle();
+
+      if (profile) {
+        setName(profile.name || "");
+        setFaculty(profile.faculty || "");
+        setGrade(profile.grade || "1");
+        setInterests(profile.interests || "");
+        setHobbies(profile.hobbies || "");
+        setLikes(profile.likes || "");
+        setWantToTry(profile.want_to_try || "");
+        setRelationTypes(profile.relation_types || []);
+        setContact(profile.contact || "");
+      }
+
       setChecking(false);
     };
     checkUser();
@@ -87,9 +107,7 @@ export default function ProfileEditPage() {
     }
 
     setSaved(true);
-    setTimeout(() => {
-      router.push("/browse");
-    }, 1200);
+    setTimeout(() => setSaved(false), 2000);
   };
 
   if (checking) {
@@ -101,17 +119,16 @@ export default function ProfileEditPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10" style={{ backgroundColor: "var(--bg-cream)" }}>
+    <main className="min-h-screen px-6 py-10 pb-24" style={{ backgroundColor: "var(--bg-cream)" }}>
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-extrabold mb-1" style={{ color: "var(--meidai-blue-dark)" }}>
-          プロフィールを作成
+          プロフィール
         </h1>
         <p className="text-sm text-gray-500 mb-8">
           あなたのことを少し教えてください
         </p>
 
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 space-y-6">
-          {/* 이름 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">名前（ニックネーム可）</label>
             <input
@@ -122,7 +139,6 @@ export default function ProfileEditPage() {
             />
           </div>
 
-          {/* 학부 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">学部</label>
             <select
@@ -137,7 +153,6 @@ export default function ProfileEditPage() {
             </select>
           </div>
 
-          {/* 학년 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">学年</label>
             <div className="flex gap-2">
@@ -158,7 +173,6 @@ export default function ProfileEditPage() {
             </div>
           </div>
 
-          {/* 관심분야 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">興味のある分野</label>
             <input
@@ -169,7 +183,6 @@ export default function ProfileEditPage() {
             />
           </div>
 
-          {/* 취미 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">趣味</label>
             <input
@@ -180,7 +193,6 @@ export default function ProfileEditPage() {
             />
           </div>
 
-          {/* 좋아하는 것 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">好きなもの</label>
             <input
@@ -191,7 +203,6 @@ export default function ProfileEditPage() {
             />
           </div>
 
-          {/* 해보고싶은 것 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">やってみたいこと</label>
             <input
@@ -202,7 +213,6 @@ export default function ProfileEditPage() {
             />
           </div>
 
-          {/* 원하는 관계 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">どんな繋がりを探していますか？</label>
             <div className="grid grid-cols-2 gap-2">
@@ -223,7 +233,6 @@ export default function ProfileEditPage() {
             </div>
           </div>
 
-          {/* 연락처 */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               連絡先（Instagram / LINE ID）
@@ -251,6 +260,7 @@ export default function ProfileEditPage() {
           </button>
         </div>
       </div>
+      <BottomNav />
     </main>
   );
 }
